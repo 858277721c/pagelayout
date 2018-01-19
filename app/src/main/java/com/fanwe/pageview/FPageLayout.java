@@ -81,7 +81,7 @@ public class FPageLayout extends FGestureFrameLayout
         int left = mViewCenterHorzontal.getLeft();
         int width = mViewCenterHorzontal.getWidth();
 
-        if (Math.abs(xvel) > getViewConfiguration().getScaledMinimumFlingVelocity() * 21)
+        if (Math.abs(xvel) > getViewConfiguration().getScaledMinimumFlingVelocity() * 20)
         {
             if (xvel > 0)
             {
