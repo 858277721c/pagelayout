@@ -77,7 +77,6 @@ public abstract class FGestureFrameLayout extends FrameLayout
         FTouchHelper.requestDisallowInterceptTouchEvent(this, false);
     }
 
-
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
