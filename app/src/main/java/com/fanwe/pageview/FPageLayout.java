@@ -62,4 +62,10 @@ public class FPageLayout extends FGestureFrameLayout
 
         return true;
     }
+
+    @Override
+    protected void onActionUp(MotionEvent event)
+    {
+
+    }
 }

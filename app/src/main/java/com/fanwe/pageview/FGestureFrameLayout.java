@@ -111,6 +111,7 @@ public abstract class FGestureFrameLayout extends FrameLayout
             case MotionEvent.ACTION_CANCEL:
 
                 releaseProcess();
+                onActionUp(event);
                 break;
             default:
                 break;
@@ -122,4 +123,6 @@ public abstract class FGestureFrameLayout extends FrameLayout
     protected abstract boolean canPull(FTouchHelper.Direction direction, MotionEvent event);
 
     protected abstract boolean processMoveEvent(MotionEvent event);
+
+    protected abstract void onActionUp(MotionEvent event);
 }
