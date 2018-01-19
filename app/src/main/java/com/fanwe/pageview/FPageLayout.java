@@ -12,7 +12,6 @@ import com.fanwe.lib.touchhelper.FTouchHelper;
 /**
  * Created by Administrator on 2018/1/19.
  */
-
 public class FPageLayout extends FGestureFrameLayout
 {
     public FPageLayout(@NonNull Context context)
@@ -64,9 +63,12 @@ public class FPageLayout extends FGestureFrameLayout
             return false;
         }
 
-        int dx = (int) getTouchHelper().getDeltaXFrom(FTouchHelper.EVENT_LAST);
-        int width = mViewCenterHorzontal.getWidth();
-        int legalDx = getTouchHelper().getLegalDeltaX(mViewCenterHorzontal.getLeft(), 0, width, dx);
+        final int left = mViewCenterHorzontal.getLeft();
+        final int minLeft = 0;
+        final int maxLeft = mViewCenterHorzontal.getWidth();
+        final int dx = (int) getTouchHelper().getDeltaXFrom(FTouchHelper.EVENT_LAST);
+
+        final int legalDx = getTouchHelper().getLegalDeltaX(left, minLeft, maxLeft, dx);
         mViewCenterHorzontal.offsetLeftAndRight(legalDx);
 
         return true;
@@ -80,8 +82,8 @@ public class FPageLayout extends FGestureFrameLayout
             return;
         }
 
-        int left = mViewCenterHorzontal.getLeft();
-        int width = mViewCenterHorzontal.getWidth();
+        final int left = mViewCenterHorzontal.getLeft();
+        final int width = mViewCenterHorzontal.getWidth();
 
         if (Math.abs(xvel) > getViewConfiguration().getScaledMinimumFlingVelocity() * 20)
         {
