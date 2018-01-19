@@ -44,7 +44,7 @@ public abstract class FGestureFrameLayout extends FrameLayout
     }
 
     @Override
-    public boolean onInterceptHoverEvent(MotionEvent ev)
+    public boolean onInterceptTouchEvent(MotionEvent ev)
     {
         if (mTouchHelper.isNeedIntercept())
         {
