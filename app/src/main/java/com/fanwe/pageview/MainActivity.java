@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity
 {
-    private FPageView view_page;
+    private FPageLayout view_page;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
