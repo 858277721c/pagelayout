@@ -51,7 +51,8 @@ public class FPageLayout extends FGestureFrameLayout
         {
             return false;
         }
-        return true;
+        getTouchHelper().saveDirectionHorizontal();
+        return direction == FTouchHelper.Direction.MoveLeft || direction == FTouchHelper.Direction.MoveRight;
     }
 
     @Override

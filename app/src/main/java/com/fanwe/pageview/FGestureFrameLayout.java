@@ -103,8 +103,6 @@ public abstract class FGestureFrameLayout extends FrameLayout
                 releaseProcess();
                 break;
             case MotionEvent.ACTION_MOVE:
-                mTouchHelper.saveDirection();
-
                 if (canPull(mTouchHelper.getDirection(), ev))
                 {
                     mTouchHelper.setNeedIntercept(true);
@@ -136,8 +134,6 @@ public abstract class FGestureFrameLayout extends FrameLayout
         switch (event.getAction())
         {
             case MotionEvent.ACTION_MOVE:
-                mTouchHelper.saveDirection();
-
                 if (mTouchHelper.isNeedCosume())
                 {
                     if (processMoveEvent(event))
