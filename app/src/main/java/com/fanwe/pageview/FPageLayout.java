@@ -70,6 +70,17 @@ public class FPageLayout extends FGestureFrameLayout
         {
             return;
         }
+
+        int left = mViewCenterHorzontal.getLeft();
+        int width = mViewCenterHorzontal.getWidth();
+        if (left < width / 2)
+        {
+            getScroller().startScrollToX(left, 0, -1);
+        } else
+        {
+            getScroller().startScrollToX(left, width, -1);
+        }
+        postInvalidate();
     }
 
     @Override
