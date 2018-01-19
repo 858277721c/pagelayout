@@ -105,13 +105,12 @@ public class FPageLayout extends FGestureFrameLayout
     }
 
     @Override
-    protected void onComputeScroll()
+    protected void onComputeScroll(int dx, int dy)
     {
         if (mViewCenterHorzontal == null)
         {
             return;
         }
-        int dx = getScroller().getDistanceMoveX();
         mViewCenterHorzontal.offsetLeftAndRight(dx);
     }
 }
