@@ -60,7 +60,7 @@ public abstract class FGestureFrameLayout extends FrameLayout
             case MotionEvent.ACTION_MOVE:
                 mTouchHelper.saveDirection();
 
-                if (canPull(mTouchHelper.getDirection()))
+                if (canPull(mTouchHelper.getDirection(), ev))
                 {
                     mTouchHelper.setNeedIntercept(true);
                     FTouchHelper.requestDisallowInterceptTouchEvent(this, true);
@@ -97,7 +97,7 @@ public abstract class FGestureFrameLayout extends FrameLayout
                     }
                 } else
                 {
-                    if (mTouchHelper.isNeedIntercept() || canPull(mTouchHelper.getDirection()))
+                    if (mTouchHelper.isNeedIntercept() || canPull(mTouchHelper.getDirection(), event))
                     {
                         mTouchHelper.setNeedCosume(true);
                         mTouchHelper.setNeedIntercept(true);
@@ -120,7 +120,7 @@ public abstract class FGestureFrameLayout extends FrameLayout
         return mTouchHelper.isNeedCosume() || event.getAction() == MotionEvent.ACTION_DOWN;
     }
 
-    protected abstract boolean canPull(FTouchHelper.Direction direction);
+    protected abstract boolean canPull(FTouchHelper.Direction direction, MotionEvent event);
 
     protected abstract boolean processMoveEvent(MotionEvent event);
 }
