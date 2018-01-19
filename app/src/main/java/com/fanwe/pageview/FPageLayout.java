@@ -57,7 +57,7 @@ public class FPageLayout extends FGestureFrameLayout
 
         int dx = (int) getTouchHelper().getDeltaXFrom(FTouchHelper.EVENT_LAST);
         int width = mViewCenterHorzontal.getWidth();
-        int legalDx = getTouchHelper().getLegalDeltaX(mViewCenterHorzontal.getLeft(), -width, width, dx);
+        int legalDx = getTouchHelper().getLegalDeltaX(mViewCenterHorzontal.getLeft(), -width, 0, dx);
         mViewCenterHorzontal.offsetLeftAndRight(legalDx);
 
         return true;
