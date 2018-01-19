@@ -38,7 +38,6 @@ public abstract class FGestureFrameLayout extends FrameLayout
 
     private void init()
     {
-        mScroller = new FScroller(getContext());
     }
 
     protected final FTouchHelper getTouchHelper()

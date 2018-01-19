@@ -38,6 +38,13 @@ public class FPageLayout extends FGestureFrameLayout
     }
 
     @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh)
+    {
+        super.onSizeChanged(w, h, oldw, oldh);
+        getScroller().setMaxScrollDistance(w);
+    }
+
+    @Override
     protected boolean canPull(FTouchHelper.Direction direction, MotionEvent event)
     {
         if (mViewCenterHorzontal == null)
