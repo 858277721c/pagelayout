@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
+import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
 
 import com.fanwe.lib.touchhelper.FScroller;
@@ -35,6 +37,8 @@ public abstract class FGestureFrameLayout extends FrameLayout
 
     private FTouchHelper mTouchHelper = new FTouchHelper();
     private FScroller mScroller;
+    private VelocityTracker mVelocityTracker;
+    private ViewConfiguration mViewConfiguration;
 
     private void init()
     {
@@ -52,6 +56,24 @@ public abstract class FGestureFrameLayout extends FrameLayout
             mScroller = new FScroller(getContext());
         }
         return mScroller;
+    }
+
+    protected final VelocityTracker getVelocityTracker()
+    {
+        if (mVelocityTracker == null)
+        {
+            mVelocityTracker = VelocityTracker.obtain();
+        }
+        return mVelocityTracker;
+    }
+
+    protected final ViewConfiguration getViewConfiguration()
+    {
+        if (mViewConfiguration == null)
+        {
+            mViewConfiguration = ViewConfiguration.get(getContext());
+        }
+        return mViewConfiguration;
     }
 
     @Override
@@ -73,6 +95,7 @@ public abstract class FGestureFrameLayout extends FrameLayout
             return true;
         }
 
+        getVelocityTracker().addMovement(ev);
         mTouchHelper.processTouchEvent(ev);
         switch (ev.getAction())
         {
@@ -97,11 +120,18 @@ public abstract class FGestureFrameLayout extends FrameLayout
         mTouchHelper.setNeedCosume(false);
         mTouchHelper.setNeedIntercept(false);
         FTouchHelper.requestDisallowInterceptTouchEvent(this, false);
+
+        if (mVelocityTracker != null)
+        {
+            mVelocityTracker.recycle();
+            mVelocityTracker = null;
+        }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
+        getVelocityTracker().addMovement(event);
         mTouchHelper.processTouchEvent(event);
         switch (event.getAction())
         {
@@ -131,9 +161,10 @@ public abstract class FGestureFrameLayout extends FrameLayout
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
+                getVelocityTracker().computeCurrentVelocity(1000);
+                onActionUp(event, getVelocityTracker().getXVelocity(), getVelocityTracker().getYVelocity());
 
                 releaseProcess();
-                onActionUp(event);
                 break;
             default:
                 break;
@@ -146,7 +177,7 @@ public abstract class FGestureFrameLayout extends FrameLayout
 
     protected abstract boolean processMoveEvent(MotionEvent event);
 
-    protected abstract void onActionUp(MotionEvent event);
+    protected abstract void onActionUp(MotionEvent event, float xvel, float yvel);
 
     protected abstract void onComputeScroll();
 }

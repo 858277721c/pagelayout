@@ -71,7 +71,7 @@ public class FPageLayout extends FGestureFrameLayout
     }
 
     @Override
-    protected void onActionUp(MotionEvent event)
+    protected void onActionUp(MotionEvent event, float xvel, float yvel)
     {
         if (mViewCenterHorzontal == null)
         {
@@ -80,13 +80,27 @@ public class FPageLayout extends FGestureFrameLayout
 
         int left = mViewCenterHorzontal.getLeft();
         int width = mViewCenterHorzontal.getWidth();
-        if (left < width / 2)
+
+        if (Math.abs(xvel) > getViewConfiguration().getScaledMinimumFlingVelocity() * 21)
         {
-            getScroller().startScrollToX(left, 0, -1);
+            if (xvel > 0)
+            {
+                getScroller().startScrollToX(left, width, -1);
+            } else
+            {
+                getScroller().startScrollToX(left, 0, -1);
+            }
         } else
         {
-            getScroller().startScrollToX(left, width, -1);
+            if (left < width / 2)
+            {
+                getScroller().startScrollToX(left, 0, -1);
+            } else
+            {
+                getScroller().startScrollToX(left, width, -1);
+            }
         }
+
         invalidate();
     }
 
