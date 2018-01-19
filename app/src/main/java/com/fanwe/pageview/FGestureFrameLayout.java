@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
+import com.fanwe.lib.touchhelper.FScroller;
 import com.fanwe.lib.touchhelper.FTouchHelper;
 
 /**
@@ -33,14 +34,36 @@ public abstract class FGestureFrameLayout extends FrameLayout
     }
 
     private FTouchHelper mTouchHelper = new FTouchHelper();
+    private FScroller mScroller;
 
     private void init()
     {
+        mScroller = new FScroller(getContext());
     }
 
     protected final FTouchHelper getTouchHelper()
     {
         return mTouchHelper;
+    }
+
+    protected final FScroller getScroller()
+    {
+        if (mScroller == null)
+        {
+            mScroller = new FScroller(getContext());
+        }
+        return mScroller;
+    }
+
+    @Override
+    public void computeScroll()
+    {
+        super.computeScroll();
+        if (getScroller().computeScrollOffset())
+        {
+            onComputeScroll();
+            postInvalidate();
+        }
     }
 
     @Override
@@ -125,4 +148,6 @@ public abstract class FGestureFrameLayout extends FrameLayout
     protected abstract boolean processMoveEvent(MotionEvent event);
 
     protected abstract void onActionUp(MotionEvent event);
+
+    protected abstract void onComputeScroll();
 }
