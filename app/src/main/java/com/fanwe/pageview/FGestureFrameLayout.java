@@ -61,7 +61,7 @@ public abstract class FGestureFrameLayout extends FrameLayout
         if (getScroller().computeScrollOffset())
         {
             onComputeScroll();
-            postInvalidate();
+            invalidate();
         }
     }
 

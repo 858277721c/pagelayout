@@ -87,7 +87,7 @@ public class FPageLayout extends FGestureFrameLayout
         {
             getScroller().startScrollToX(left, width, -1);
         }
-        postInvalidate();
+        invalidate();
     }
 
     @Override
