@@ -17,6 +17,6 @@ public class MainActivity extends AppCompatActivity
         view_page = findViewById(R.id.view_page);
         tv_center = findViewById(R.id.tv_center);
 
-        view_page.setViewCenterHorzontal(tv_center);
+        view_page.setPageView(tv_center);
     }
 }

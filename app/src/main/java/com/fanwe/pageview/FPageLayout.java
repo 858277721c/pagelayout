@@ -29,11 +29,11 @@ public class FPageLayout extends FGestureFrameLayout
         super(context, attrs, defStyleAttr);
     }
 
-    private View mViewCenterHorzontal;
+    private View mPageView;
 
-    public void setViewCenterHorzontal(View viewCenterHorzontal)
+    public void setPageView(View pageView)
     {
-        mViewCenterHorzontal = viewCenterHorzontal;
+        mPageView = pageView;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class FPageLayout extends FGestureFrameLayout
     @Override
     protected boolean canPull(MotionEvent event)
     {
-        if (mViewCenterHorzontal == null)
+        if (mPageView == null)
         {
             return false;
         }
@@ -58,18 +58,18 @@ public class FPageLayout extends FGestureFrameLayout
     @Override
     protected boolean processMoveEvent(MotionEvent event)
     {
-        if (mViewCenterHorzontal == null)
+        if (mPageView == null)
         {
             return false;
         }
 
-        final int left = mViewCenterHorzontal.getLeft();
+        final int left = mPageView.getLeft();
         final int minLeft = 0;
-        final int maxLeft = mViewCenterHorzontal.getWidth();
+        final int maxLeft = mPageView.getWidth();
         final int dx = (int) getTouchHelper().getDeltaXFrom(FTouchHelper.EVENT_LAST);
 
         final int legalDx = getTouchHelper().getLegalDeltaX(left, minLeft, maxLeft, dx);
-        mViewCenterHorzontal.offsetLeftAndRight(legalDx);
+        mPageView.offsetLeftAndRight(legalDx);
 
         return true;
     }
@@ -77,31 +77,32 @@ public class FPageLayout extends FGestureFrameLayout
     @Override
     protected void onActionUp(MotionEvent event, float xvel, float yvel)
     {
-        if (mViewCenterHorzontal == null)
+        if (mPageView == null)
         {
             return;
         }
 
-        final int left = mViewCenterHorzontal.getLeft();
-        final int width = mViewCenterHorzontal.getWidth();
+        final int left = mPageView.getLeft();
+        final int minLeft = 0;
+        final int maxLeft = mPageView.getWidth();
 
         if (Math.abs(xvel) > getViewConfiguration().getScaledMinimumFlingVelocity() * 20)
         {
             if (xvel > 0)
             {
-                getScroller().startScrollToX(left, width, -1);
+                getScroller().startScrollToX(left, maxLeft, -1);
             } else
             {
-                getScroller().startScrollToX(left, 0, -1);
+                getScroller().startScrollToX(left, minLeft, -1);
             }
         } else
         {
-            if (left < width / 2)
+            if (left < maxLeft / 2)
             {
-                getScroller().startScrollToX(left, 0, -1);
+                getScroller().startScrollToX(left, minLeft, -1);
             } else
             {
-                getScroller().startScrollToX(left, width, -1);
+                getScroller().startScrollToX(left, maxLeft, -1);
             }
         }
 
@@ -111,10 +112,10 @@ public class FPageLayout extends FGestureFrameLayout
     @Override
     protected void onComputeScroll(int dx, int dy)
     {
-        if (mViewCenterHorzontal == null)
+        if (mPageView == null)
         {
             return;
         }
-        mViewCenterHorzontal.offsetLeftAndRight(dx);
+        mPageView.offsetLeftAndRight(dx);
     }
 }
