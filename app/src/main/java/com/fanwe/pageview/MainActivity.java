@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity
         view_page = findViewById(R.id.view_page);
         tv_center = findViewById(R.id.tv_center);
 
-        tv_center.setOnClickListener(new View.OnClickListener()
+        view_page.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)

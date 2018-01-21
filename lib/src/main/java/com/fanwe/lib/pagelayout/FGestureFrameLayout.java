@@ -58,6 +58,12 @@ public abstract class FGestureFrameLayout extends FrameLayout
                 super.onActionUp(event, velocityX, velocityY);
                 FGestureFrameLayout.this.onActionUp(event, velocityX, velocityY);
             }
+
+            @Override
+            public boolean onSingleTapUp(MotionEvent e)
+            {
+                return super.onSingleTapUp(e);
+            }
         });
     }
 
@@ -128,7 +134,7 @@ public abstract class FGestureFrameLayout extends FrameLayout
     public boolean onTouchEvent(MotionEvent event)
     {
         mTouchHelper.processTouchEvent(event);
-        return mGestureDetector.onTouchEvent(event);
+        return getGestureDetector().onTouchEvent(event);
     }
 
     protected boolean shouldInterceptTouchEvent(MotionEvent event)
@@ -141,4 +147,9 @@ public abstract class FGestureFrameLayout extends FrameLayout
     protected abstract void onActionUp(MotionEvent event, float velocityX, float velocityY);
 
     protected abstract void onComputeScroll(int dx, int dy);
+
+    public interface GestureCallback
+    {
+
+    }
 }
