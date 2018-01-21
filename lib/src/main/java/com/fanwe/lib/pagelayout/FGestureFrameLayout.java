@@ -3,6 +3,7 @@ package com.fanwe.lib.pagelayout;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
 
@@ -36,6 +37,8 @@ public abstract class FGestureFrameLayout extends FrameLayout
 
     private ViewConfiguration mViewConfiguration;
 
+    private GestureCallback mGestureCallback;
+
     private void init()
     {
         mGestureDetector = new FGestureDetector(getContext(), new FGestureDetector.Callback()
@@ -62,9 +65,18 @@ public abstract class FGestureFrameLayout extends FrameLayout
             @Override
             public boolean onSingleTapUp(MotionEvent e)
             {
+                if (mGestureCallback != null)
+                {
+                    mGestureCallback.onSingleTapUp(FGestureFrameLayout.this);
+                }
                 return super.onSingleTapUp(e);
             }
         });
+    }
+
+    public void setGestureCallback(GestureCallback gestureCallback)
+    {
+        mGestureCallback = gestureCallback;
     }
 
     protected final FTouchHelper getTouchHelper()
@@ -150,6 +162,6 @@ public abstract class FGestureFrameLayout extends FrameLayout
 
     public interface GestureCallback
     {
-
+        void onSingleTapUp(View view);
     }
 }

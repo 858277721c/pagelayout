@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fanwe.lib.pagelayout.FGestureFrameLayout;
 import com.fanwe.lib.pagelayout.FPageLayout;
 
 public class MainActivity extends AppCompatActivity
@@ -21,10 +22,10 @@ public class MainActivity extends AppCompatActivity
         view_page = findViewById(R.id.view_page);
         tv_center = findViewById(R.id.tv_center);
 
-        view_page.setOnClickListener(new View.OnClickListener()
+        view_page.setGestureCallback(new FGestureFrameLayout.GestureCallback()
         {
             @Override
-            public void onClick(View v)
+            public void onSingleTapUp(View view)
             {
                 Toast.makeText(MainActivity.this, "click", Toast.LENGTH_SHORT).show();
             }
