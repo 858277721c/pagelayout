@@ -6,31 +6,31 @@ import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-final class ViewPosition
+public class FViewPosition
 {
-    private static final Map<View, ViewPosition> MAP_VIEW_POSITION = new WeakHashMap<>();
+    private static final Map<View, FViewPosition> MAP_VIEW_POSITION = new WeakHashMap<>();
 
     private WeakReference<View> mView;
     private int mLeft;
     private int mTop;
 
-    private ViewPosition(View view)
+    private FViewPosition(View view)
     {
         mView = new WeakReference<>(view);
         reset();
     }
 
-    public static ViewPosition get(View view)
+    public static FViewPosition get(View view)
     {
         if (view == null)
         {
             return null;
         }
 
-        ViewPosition position = MAP_VIEW_POSITION.get(view);
+        FViewPosition position = MAP_VIEW_POSITION.get(view);
         if (position == null)
         {
-            position = new ViewPosition(view);
+            position = new FViewPosition(view);
             MAP_VIEW_POSITION.put(view, position);
         }
         return position;
@@ -72,7 +72,7 @@ final class ViewPosition
         return mLeft >= 0 && mTop >= 0;
     }
 
-    private void reset()
+    public void reset()
     {
         mLeft = -1;
         mTop = -1;
