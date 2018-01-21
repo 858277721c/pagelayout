@@ -53,7 +53,8 @@ public class FPageLayout extends FGestureFrameLayout
     @Override
     protected boolean shouldInterceptTouchEvent(MotionEvent event)
     {
-        return getTouchHelper().getDeltaXFrom(FTouchHelper.EVENT_DOWN) > getViewConfiguration().getScaledTouchSlop();
+        final float dx = getTouchHelper().getDeltaXFrom(FTouchHelper.EVENT_DOWN);
+        return dx > getViewConfiguration().getScaledTouchSlop();
     }
 
     @Override
