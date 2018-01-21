@@ -1,8 +1,6 @@
-package com.fanwe.pageview;
+package com.fanwe.lib.pagelayout;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -17,19 +15,19 @@ import com.fanwe.lib.touchhelper.FTouchHelper;
  */
 public abstract class FGestureFrameLayout extends FrameLayout
 {
-    public FGestureFrameLayout(@NonNull Context context)
+    public FGestureFrameLayout(Context context)
     {
         super(context);
         init();
     }
 
-    public FGestureFrameLayout(@NonNull Context context, @Nullable AttributeSet attrs)
+    public FGestureFrameLayout(Context context, AttributeSet attrs)
     {
         super(context, attrs);
         init();
     }
 
-    public FGestureFrameLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr)
+    public FGestureFrameLayout(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
         init();
