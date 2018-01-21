@@ -2,14 +2,13 @@ package com.fanwe.lib.pagelayout;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.fanwe.lib.touchhelper.FGestureDetector;
 import com.fanwe.lib.touchhelper.FScroller;
 import com.fanwe.lib.touchhelper.FTouchHelper;
 
@@ -38,13 +37,13 @@ public abstract class FGestureFrameLayout extends FrameLayout
 
     private FTouchHelper mTouchHelper = new FTouchHelper();
     private FScroller mScroller;
-    private VelocityTracker mVelocityTracker;
+    private FGestureDetector mGestureDetector;
     private ViewConfiguration mViewConfiguration;
-    private GestureDetector mGestureDetector;
+
 
     private void init()
     {
-        mGestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener()
+        mGestureDetector = new FGestureDetector(getContext(), new FGestureDetector.Callback()
         {
             @Override
             public boolean onDown(MotionEvent e)
@@ -56,7 +55,13 @@ public abstract class FGestureFrameLayout extends FrameLayout
             public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
             {
                 return processMoveEvent(e2);
+            }
 
+            @Override
+            public void onActionUp(MotionEvent event, float velocityX, float velocityY)
+            {
+                super.onActionUp(event, velocityX, velocityY);
+                FGestureFrameLayout.this.onActionUp(event, velocityX, velocityY);
             }
         });
     }
@@ -75,15 +80,6 @@ public abstract class FGestureFrameLayout extends FrameLayout
         return mScroller;
     }
 
-    protected final VelocityTracker getVelocityTracker()
-    {
-        if (mVelocityTracker == null)
-        {
-            mVelocityTracker = VelocityTracker.obtain();
-        }
-        return mVelocityTracker;
-    }
-
     protected final ViewConfiguration getViewConfiguration()
     {
         if (mViewConfiguration == null)
@@ -91,15 +87,6 @@ public abstract class FGestureFrameLayout extends FrameLayout
             mViewConfiguration = ViewConfiguration.get(getContext());
         }
         return mViewConfiguration;
-    }
-
-    private void releaseVelocityTracker()
-    {
-        if (mVelocityTracker != null)
-        {
-            mVelocityTracker.recycle();
-            mVelocityTracker = null;
-        }
     }
 
     @Override
@@ -124,25 +111,13 @@ public abstract class FGestureFrameLayout extends FrameLayout
     public boolean onTouchEvent(MotionEvent event)
     {
         mTouchHelper.processTouchEvent(event);
-        getVelocityTracker().addMovement(event);
-
         boolean result = mGestureDetector.onTouchEvent(event);
-
-        if (event.getAction() == MotionEvent.ACTION_UP)
-        {
-            getVelocityTracker().computeCurrentVelocity(1000);
-            float velocityX = getVelocityTracker().getXVelocity();
-            float velocityY = getVelocityTracker().getYVelocity();
-            onActionUp(event, velocityX, velocityY);
-            releaseVelocityTracker();
-        }
-
         return result;
     }
 
     protected abstract boolean processMoveEvent(MotionEvent event);
 
-    protected abstract void onActionUp(MotionEvent event, float xvel, float yvel);
+    protected abstract void onActionUp(MotionEvent event, float velocityX, float velocityY);
 
     protected abstract void onComputeScroll(int dx, int dy);
 
