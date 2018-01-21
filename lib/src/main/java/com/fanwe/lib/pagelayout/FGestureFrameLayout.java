@@ -98,7 +98,27 @@ public abstract class FGestureFrameLayout extends FrameLayout
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event)
     {
+        if (mTouchHelper.isNeedIntercept())
+        {
+            return true;
+        }
+
         mTouchHelper.processTouchEvent(event);
+        switch (event.getAction())
+        {
+            case MotionEvent.ACTION_DOWN:
+                mTouchHelper.setNeedIntercept(false);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if (shouldInterceptTouchEvent(event))
+                {
+                    mTouchHelper.setNeedIntercept(true);
+                    FTouchHelper.requestDisallowInterceptTouchEvent(this, true);
+                    return true;
+                }
+                break;
+        }
+
         return super.onInterceptTouchEvent(event);
     }
 
@@ -107,6 +127,11 @@ public abstract class FGestureFrameLayout extends FrameLayout
     {
         mTouchHelper.processTouchEvent(event);
         return mGestureDetector.onTouchEvent(event);
+    }
+
+    protected boolean shouldInterceptTouchEvent(MotionEvent event)
+    {
+        return false;
     }
 
     protected abstract boolean processMoveEvent(MotionEvent event);
