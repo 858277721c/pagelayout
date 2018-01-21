@@ -3,9 +3,7 @@ package com.fanwe.lib.pagelayout;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewConfiguration;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.fanwe.lib.touchhelper.FGestureDetector;
@@ -119,58 +117,4 @@ public abstract class FGestureFrameLayout extends FrameLayout
     protected abstract void onActionUp(MotionEvent event, float velocityX, float velocityY);
 
     protected abstract void onComputeScroll(int dx, int dy);
-
-    protected final static void synchronizeMargin(View view, boolean update)
-    {
-        MarginLayoutParams params = getMarginLayoutParams(view);
-        if (params == null)
-        {
-            return;
-        }
-
-        final int left = view.getLeft();
-        final int top = view.getTop();
-
-        boolean changed = false;
-        if (params.leftMargin != left)
-        {
-            params.leftMargin = left;
-            changed = true;
-        }
-        if (params.topMargin != top)
-        {
-            params.topMargin = top;
-            changed = true;
-        }
-
-        if (changed)
-        {
-            if (update)
-            {
-                view.setLayoutParams(params);
-            }
-        }
-    }
-
-    /**
-     * 获得view的MarginLayoutParams，返回值可能为null
-     *
-     * @param view
-     * @return
-     */
-    private static MarginLayoutParams getMarginLayoutParams(View view)
-    {
-        if (view == null)
-        {
-            return null;
-        }
-        ViewGroup.LayoutParams params = view.getLayoutParams();
-        if (params != null && params instanceof MarginLayoutParams)
-        {
-            return (MarginLayoutParams) params;
-        } else
-        {
-            return null;
-        }
-    }
 }
