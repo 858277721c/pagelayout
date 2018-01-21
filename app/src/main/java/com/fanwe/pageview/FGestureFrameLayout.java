@@ -82,7 +82,7 @@ public abstract class FGestureFrameLayout extends FrameLayout
         super.computeScroll();
         if (getScroller().computeScrollOffset())
         {
-            onComputeScroll(getScroller().getDistanceMoveX(), getScroller().getDistanceMoveY());
+            onComputeScroll(getScroller().getDeltaX(), getScroller().getDeltaY());
             invalidate();
         }
     }
