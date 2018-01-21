@@ -101,10 +101,10 @@ public abstract class FGestureFrameLayout extends FrameLayout
     }
 
     @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev)
+    public boolean onInterceptTouchEvent(MotionEvent event)
     {
-        mTouchHelper.processTouchEvent(ev);
-        return super.onInterceptTouchEvent(ev);
+        mTouchHelper.processTouchEvent(event);
+        return super.onInterceptTouchEvent(event);
     }
 
     @Override
