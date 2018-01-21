@@ -38,6 +38,8 @@ public abstract class FGestureFrameLayout extends FrameLayout
     private VelocityTracker mVelocityTracker;
     private ViewConfiguration mViewConfiguration;
 
+    private boolean mIntercept;
+
     private void init()
     {
     }
@@ -74,6 +76,11 @@ public abstract class FGestureFrameLayout extends FrameLayout
         return mViewConfiguration;
     }
 
+    public void setIntercept(boolean intercept)
+    {
+        mIntercept = intercept;
+    }
+
     @Override
     public void computeScroll()
     {
@@ -88,6 +95,11 @@ public abstract class FGestureFrameLayout extends FrameLayout
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev)
     {
+        if (!mIntercept)
+        {
+            return super.onInterceptTouchEvent(ev);
+        }
+
         if (mTouchHelper.isNeedIntercept())
         {
             return true;
