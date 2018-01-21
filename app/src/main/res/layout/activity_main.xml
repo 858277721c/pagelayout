@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <Button
+        <TextView
             android:id="@+id/tv_center"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

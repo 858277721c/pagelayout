@@ -68,6 +68,7 @@ public class FPageLayout extends FGestureFrameLayout
 
         final int legalDx = getTouchHelper().getLegalDeltaX(left, minLeft, maxLeft, dx);
         mPageView.offsetLeftAndRight(legalDx);
+        synchronizeMargin(mPageView, false);
 
         return true;
     }
@@ -115,6 +116,7 @@ public class FPageLayout extends FGestureFrameLayout
             return;
         }
         mPageView.offsetLeftAndRight(dx);
+        synchronizeMargin(mPageView, false);
     }
 
     @Override
