@@ -6,12 +6,16 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fanwe.lib.looper.FLooper;
+import com.fanwe.lib.looper.impl.FSimpleLooper;
 import com.fanwe.lib.pagelayout.FPageLayout;
 
 public class MainActivity extends AppCompatActivity
 {
     private FPageLayout view_page;
     private TextView tv_center;
+
+    private FLooper mLooper = new FSimpleLooper();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -30,5 +34,21 @@ public class MainActivity extends AppCompatActivity
             }
         });
         view_page.setPageView(tv_center);
+
+        mLooper.start(1000, new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                view_page.requestLayout();
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        mLooper.stop();
     }
 }
