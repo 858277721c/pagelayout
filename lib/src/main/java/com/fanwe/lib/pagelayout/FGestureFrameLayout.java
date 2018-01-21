@@ -2,6 +2,7 @@ package com.fanwe.lib.pagelayout;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -39,11 +40,25 @@ public abstract class FGestureFrameLayout extends FrameLayout
     private FScroller mScroller;
     private VelocityTracker mVelocityTracker;
     private ViewConfiguration mViewConfiguration;
-
-    private boolean mIntercept;
+    private GestureDetector mGestureDetector;
 
     private void init()
     {
+        mGestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener()
+        {
+            @Override
+            public boolean onDown(MotionEvent e)
+            {
+                return true;
+            }
+
+            @Override
+            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
+            {
+                return processMoveEvent(e2);
+
+            }
+        });
     }
 
     protected final FTouchHelper getTouchHelper()
@@ -78,9 +93,13 @@ public abstract class FGestureFrameLayout extends FrameLayout
         return mViewConfiguration;
     }
 
-    public void setIntercept(boolean intercept)
+    private void releaseVelocityTracker()
     {
-        mIntercept = intercept;
+        if (mVelocityTracker != null)
+        {
+            mVelocityTracker.recycle();
+            mVelocityTracker = null;
+        }
     }
 
     @Override
@@ -97,91 +116,29 @@ public abstract class FGestureFrameLayout extends FrameLayout
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev)
     {
-        if (!mIntercept)
-        {
-            return super.onInterceptTouchEvent(ev);
-        }
-
-        if (mTouchHelper.isNeedIntercept())
-        {
-            return true;
-        }
-
-        getVelocityTracker().addMovement(ev);
         mTouchHelper.processTouchEvent(ev);
-        switch (ev.getAction())
-        {
-            case MotionEvent.ACTION_DOWN:
-                releaseProcess();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                if (canPull(ev))
-                {
-                    mTouchHelper.setNeedIntercept(true);
-                    FTouchHelper.requestDisallowInterceptTouchEvent(this, true);
-                }
-                break;
-        }
-        return mTouchHelper.isNeedIntercept();
-    }
-
-    private void releaseProcess()
-    {
-        mTouchHelper.setNeedCosume(false);
-        mTouchHelper.setNeedIntercept(false);
-        FTouchHelper.requestDisallowInterceptTouchEvent(this, false);
-
-        if (mVelocityTracker != null)
-        {
-            mVelocityTracker.recycle();
-            mVelocityTracker = null;
-        }
+        return super.onInterceptTouchEvent(ev);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
-        getVelocityTracker().addMovement(event);
         mTouchHelper.processTouchEvent(event);
-        switch (event.getAction())
-        {
-            case MotionEvent.ACTION_MOVE:
-                if (mTouchHelper.isNeedCosume())
-                {
-                    if (processMoveEvent(event))
-                    {
-                    } else
-                    {
-                        releaseProcess();
-                    }
-                } else
-                {
-                    if (mTouchHelper.isNeedIntercept() || canPull(event))
-                    {
-                        mTouchHelper.setNeedCosume(true);
-                        mTouchHelper.setNeedIntercept(true);
-                        FTouchHelper.requestDisallowInterceptTouchEvent(this, true);
-                    } else
-                    {
-                        releaseProcess();
-                    }
-                }
-                break;
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
-                getVelocityTracker().computeCurrentVelocity(1000);
-                onActionUp(event, getVelocityTracker().getXVelocity(), getVelocityTracker().getYVelocity());
+        getVelocityTracker().addMovement(event);
 
-                releaseProcess();
-                break;
-            default:
-                break;
+        boolean result = mGestureDetector.onTouchEvent(event);
+
+        if (event.getAction() == MotionEvent.ACTION_UP)
+        {
+            getVelocityTracker().computeCurrentVelocity(1000);
+            float velocityX = getVelocityTracker().getXVelocity();
+            float velocityY = getVelocityTracker().getYVelocity();
+            onActionUp(event, velocityX, velocityY);
+            releaseVelocityTracker();
         }
 
-        return mTouchHelper.isNeedCosume() || event.getAction() == MotionEvent.ACTION_DOWN;
+        return result;
     }
-
-    protected abstract boolean canPull(MotionEvent event);
 
     protected abstract boolean processMoveEvent(MotionEvent event);
 
@@ -189,8 +146,7 @@ public abstract class FGestureFrameLayout extends FrameLayout
 
     protected abstract void onComputeScroll(int dx, int dy);
 
-
-    protected static void synchronizeMargin(View view, boolean update)
+    protected final static void synchronizeMargin(View view, boolean update)
     {
         MarginLayoutParams params = getMarginLayoutParams(view);
         if (params == null)

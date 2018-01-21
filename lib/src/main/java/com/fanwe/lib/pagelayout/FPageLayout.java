@@ -42,18 +42,6 @@ public class FPageLayout extends FGestureFrameLayout
     }
 
     @Override
-    protected boolean canPull(MotionEvent event)
-    {
-        if (mPageView == null)
-        {
-            return false;
-        }
-        getTouchHelper().saveDirectionHorizontal();
-        final FTouchHelper.Direction direction = getTouchHelper().getDirection();
-        return direction == FTouchHelper.Direction.MoveLeft || direction == FTouchHelper.Direction.MoveRight;
-    }
-
-    @Override
     protected boolean processMoveEvent(MotionEvent event)
     {
         if (mPageView == null)
