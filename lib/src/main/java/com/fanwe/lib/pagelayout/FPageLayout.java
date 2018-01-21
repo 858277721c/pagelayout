@@ -116,4 +116,15 @@ public class FPageLayout extends FGestureFrameLayout
         }
         mPageView.offsetLeftAndRight(dx);
     }
+
+    @Override
+    protected void onFinishInflate()
+    {
+        super.onFinishInflate();
+
+        if (getChildCount() > 0)
+        {
+            setPageView(getChildAt(0));
+        }
+    }
 }
