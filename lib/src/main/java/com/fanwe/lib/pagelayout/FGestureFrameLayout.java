@@ -106,9 +106,6 @@ public abstract class FGestureFrameLayout extends FrameLayout
         mTouchHelper.processTouchEvent(event);
         switch (event.getAction())
         {
-            case MotionEvent.ACTION_DOWN:
-                mTouchHelper.setNeedIntercept(false);
-                break;
             case MotionEvent.ACTION_MOVE:
                 if (shouldInterceptTouchEvent(event))
                 {
