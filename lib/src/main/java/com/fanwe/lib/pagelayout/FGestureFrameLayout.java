@@ -31,10 +31,10 @@ public abstract class FGestureFrameLayout extends FrameLayout
     }
 
     private FTouchHelper mTouchHelper = new FTouchHelper();
-    private FScroller mScroller;
     private FGestureDetector mGestureDetector;
-    private ViewConfiguration mViewConfiguration;
+    private FScroller mScroller;
 
+    private ViewConfiguration mViewConfiguration;
 
     private void init()
     {
@@ -64,6 +64,11 @@ public abstract class FGestureFrameLayout extends FrameLayout
     protected final FTouchHelper getTouchHelper()
     {
         return mTouchHelper;
+    }
+
+    protected final FGestureDetector getGestureDetector()
+    {
+        return mGestureDetector;
     }
 
     protected final FScroller getScroller()
