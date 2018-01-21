@@ -6,9 +6,6 @@ import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-/**
- * Created by zhengjun on 2018/1/21.
- */
 final class ViewPosition
 {
     private static final Map<View, ViewPosition> MAP_VIEW_POSITION = new WeakHashMap<>();

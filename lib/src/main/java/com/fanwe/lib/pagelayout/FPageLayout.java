@@ -7,9 +7,6 @@ import android.view.View;
 
 import com.fanwe.lib.touchhelper.FTouchHelper;
 
-/**
- * Created by Administrator on 2018/1/19.
- */
 public class FPageLayout extends FGestureFrameLayout
 {
     public FPageLayout(Context context)

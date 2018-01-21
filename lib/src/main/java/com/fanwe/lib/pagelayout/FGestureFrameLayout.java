@@ -10,9 +10,6 @@ import com.fanwe.lib.touchhelper.FGestureDetector;
 import com.fanwe.lib.touchhelper.FScroller;
 import com.fanwe.lib.touchhelper.FTouchHelper;
 
-/**
- * Created by Administrator on 2018/1/16.
- */
 public abstract class FGestureFrameLayout extends FrameLayout
 {
     public FGestureFrameLayout(Context context)
