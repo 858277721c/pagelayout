@@ -111,8 +111,7 @@ public abstract class FGestureFrameLayout extends FrameLayout
     public boolean onTouchEvent(MotionEvent event)
     {
         mTouchHelper.processTouchEvent(event);
-        boolean result = mGestureDetector.onTouchEvent(event);
-        return result;
+        return mGestureDetector.onTouchEvent(event);
     }
 
     protected abstract boolean processMoveEvent(MotionEvent event);
