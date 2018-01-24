@@ -16,8 +16,7 @@ public class FViewPosition
 
     private FViewPosition(View view)
     {
-        mView = new WeakReference<>(view);
-        reset();
+        setView(view);
     }
 
     public static FViewPosition get(View view)
@@ -36,6 +35,22 @@ public class FViewPosition
         return position;
     }
 
+    public void setView(View view)
+    {
+        final View old = getView();
+        if (old != view)
+        {
+            if (view != null)
+            {
+                mView = new WeakReference<>(view);
+            } else
+            {
+                mView = null;
+            }
+            reset();
+        }
+    }
+
     private View getView()
     {
         return mView == null ? null : mView.get();
@@ -50,6 +65,16 @@ public class FViewPosition
         }
         mLeft = view.getLeft();
         mTop = view.getTop();
+    }
+
+    public int getLeft()
+    {
+        return mLeft;
+    }
+
+    public int getTop()
+    {
+        return mTop;
     }
 
     public void layout()
