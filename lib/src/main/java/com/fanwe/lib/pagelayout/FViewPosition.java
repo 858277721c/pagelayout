@@ -56,15 +56,16 @@ public class FViewPosition
         return mView == null ? null : mView.get();
     }
 
-    public void savePosition()
+    public boolean savePosition()
     {
         final View view = getView();
         if (view == null)
         {
-            return;
+            return false;
         }
         mLeft = view.getLeft();
         mTop = view.getTop();
+        return true;
     }
 
     public int getLeft()
@@ -77,19 +78,20 @@ public class FViewPosition
         return mTop;
     }
 
-    public void layout()
+    public boolean layout()
     {
         final View view = getView();
         if (view == null)
         {
-            return;
+            return false;
         }
         if (!hasPosition())
         {
-            return;
+            return false;
         }
 
         view.layout(mLeft, mTop, mLeft + view.getWidth(), mTop + view.getHeight());
+        return true;
     }
 
     public boolean hasPosition()
