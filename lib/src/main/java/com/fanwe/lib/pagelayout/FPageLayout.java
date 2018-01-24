@@ -25,10 +25,12 @@ public class FPageLayout extends FGestureFrameLayout
     }
 
     private View mPageView;
+    private FViewPosition mPageViewPosition = new FViewPosition(null);
 
     public void setPageView(View pageView)
     {
         mPageView = pageView;
+        mPageViewPosition.setView(pageView);
     }
 
     @Override
@@ -43,10 +45,9 @@ public class FPageLayout extends FGestureFrameLayout
     {
         super.onLayout(changed, left, top, right, bottom);
 
-        FViewPosition position = FViewPosition.get(mPageView);
-        if (position != null)
+        if (mPageViewPosition.hasPosition())
         {
-            position.layout();
+            mPageViewPosition.layout();
         }
     }
 
@@ -65,7 +66,7 @@ public class FPageLayout extends FGestureFrameLayout
 
         final int legalDx = getTouchHelper().getLegalDeltaX(left, minLeft, maxLeft, dx);
         mPageView.offsetLeftAndRight(legalDx);
-        FViewPosition.get(mPageView).savePosition();
+        mPageViewPosition.savePosition();
 
         return true;
     }
@@ -113,7 +114,7 @@ public class FPageLayout extends FGestureFrameLayout
             return;
         }
         mPageView.offsetLeftAndRight(dx);
-        FViewPosition.get(mPageView).savePosition();
+        mPageViewPosition.savePosition();
     }
 
     @Override
