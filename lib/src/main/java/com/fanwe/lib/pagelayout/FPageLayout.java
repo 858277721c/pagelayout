@@ -45,10 +45,7 @@ public class FPageLayout extends FGestureFrameLayout
     {
         super.onLayout(changed, left, top, right, bottom);
 
-        if (mPageViewPosition.hasPosition())
-        {
-            mPageViewPosition.layout();
-        }
+        mPageViewPosition.layout();
     }
 
     @Override
