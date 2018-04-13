@@ -112,6 +112,16 @@ public class FPageLayout extends FGestureFrameLayout
     }
 
     @Override
+    protected boolean onGestureSingleTapUp(MotionEvent event)
+    {
+        if (mGestureCallback != null)
+        {
+            mGestureCallback.onSingleTapUp();
+        }
+        return super.onGestureSingleTapUp(event);
+    }
+
+    @Override
     protected void onComputeScroll(int dx, int dy)
     {
         if (mPageView == null)
@@ -135,6 +145,6 @@ public class FPageLayout extends FGestureFrameLayout
 
     public interface GestureCallback
     {
-        void onSingleTapUp(View view);
+        void onSingleTapUp();
     }
 }
