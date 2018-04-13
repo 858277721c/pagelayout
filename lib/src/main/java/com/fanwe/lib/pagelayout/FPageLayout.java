@@ -26,7 +26,7 @@ public class FPageLayout extends FGestureFrameLayout
     }
 
     private View mPageView;
-    private FViewBound mPageViewBound = new FViewBound(null);
+    private FViewBounds mPageViewBounds = new FViewBounds(null);
 
     private GestureCallback mGestureCallback;
 
@@ -38,7 +38,7 @@ public class FPageLayout extends FGestureFrameLayout
     public void setPageView(View pageView)
     {
         mPageView = pageView;
-        mPageViewBound.setView(pageView);
+        mPageViewBounds.setView(pageView);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class FPageLayout extends FGestureFrameLayout
     {
         super.onLayout(changed, left, top, right, bottom);
 
-        mPageViewBound.layout();
+        mPageViewBounds.layout();
     }
 
     @Override
@@ -71,7 +71,7 @@ public class FPageLayout extends FGestureFrameLayout
         final int legalDx = getTouchHelper().getLegalDeltaX(left, minLeft, maxLeft, dx);
 
         mPageView.offsetLeftAndRight(legalDx);
-        mPageViewBound.save();
+        mPageViewBounds.save();
 
         return true;
     }
@@ -129,7 +129,7 @@ public class FPageLayout extends FGestureFrameLayout
             return;
         }
         mPageView.offsetLeftAndRight(dx);
-        mPageViewBound.save();
+        mPageViewBounds.save();
     }
 
     @Override

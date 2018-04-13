@@ -4,13 +4,13 @@ import android.view.View;
 
 import java.lang.ref.WeakReference;
 
-public class FViewBound
+public class FViewBounds
 {
     private WeakReference<View> mView;
     private int mLeft;
     private int mTop;
 
-    public FViewBound(View view)
+    public FViewBounds(View view)
     {
         setView(view);
     }
@@ -58,7 +58,7 @@ public class FViewBound
         return mTop;
     }
 
-    public boolean hasPosition()
+    public boolean hasBounds()
     {
         return mLeft >= 0 && mTop >= 0;
     }
@@ -76,7 +76,7 @@ public class FViewBound
         {
             return false;
         }
-        if (!hasPosition())
+        if (!hasBounds())
         {
             return false;
         }
