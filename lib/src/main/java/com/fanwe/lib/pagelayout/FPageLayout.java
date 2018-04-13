@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.fanwe.lib.touchhelper.FTouchHelper;
+import com.fanwe.lib.touchhelper.view.FGestureFrameLayout;
 
 public class FPageLayout extends FGestureFrameLayout
 {
@@ -25,12 +26,19 @@ public class FPageLayout extends FGestureFrameLayout
     }
 
     private View mPageView;
-    private FViewPosition mPageViewPosition = new FViewPosition(null);
+    private FViewBound mPageViewBound = new FViewBound(null);
+
+    private GestureCallback mGestureCallback;
+
+    public void setGestureCallback(GestureCallback gestureCallback)
+    {
+        mGestureCallback = gestureCallback;
+    }
 
     public void setPageView(View pageView)
     {
         mPageView = pageView;
-        mPageViewPosition.setView(pageView);
+        mPageViewBound.setView(pageView);
     }
 
     @Override
@@ -45,11 +53,11 @@ public class FPageLayout extends FGestureFrameLayout
     {
         super.onLayout(changed, left, top, right, bottom);
 
-        mPageViewPosition.layout();
+        mPageViewBound.layout();
     }
 
     @Override
-    protected boolean processMoveEvent(MotionEvent event)
+    protected boolean onGestureScroll(MotionEvent event)
     {
         if (mPageView == null)
         {
@@ -60,16 +68,16 @@ public class FPageLayout extends FGestureFrameLayout
         final int minLeft = 0;
         final int maxLeft = mPageView.getWidth();
         final int dx = (int) getTouchHelper().getDeltaXFrom(FTouchHelper.EVENT_LAST);
-
         final int legalDx = getTouchHelper().getLegalDeltaX(left, minLeft, maxLeft, dx);
+
         mPageView.offsetLeftAndRight(legalDx);
-        mPageViewPosition.savePosition();
+        mPageViewBound.save();
 
         return true;
     }
 
     @Override
-    protected void onActionUp(MotionEvent event, float velocityX, float velocityY)
+    protected void onGestureUp(MotionEvent event, float velocityX, float velocityY)
     {
         if (mPageView == null)
         {
@@ -111,7 +119,7 @@ public class FPageLayout extends FGestureFrameLayout
             return;
         }
         mPageView.offsetLeftAndRight(dx);
-        mPageViewPosition.savePosition();
+        mPageViewBound.save();
     }
 
     @Override
@@ -123,5 +131,10 @@ public class FPageLayout extends FGestureFrameLayout
         {
             setPageView(getChildAt(0));
         }
+    }
+
+    public interface GestureCallback
+    {
+        void onSingleTapUp(View view);
     }
 }
