@@ -91,7 +91,7 @@ public class FPageLayout extends FrameLayout
         @Override
         public boolean shouldConsumeTouchEvent(MotionEvent event)
         {
-            return true;
+            return canPull();
         }
 
         @Override
@@ -170,11 +170,10 @@ public class FPageLayout extends FrameLayout
         }
     };
 
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev)
+    private boolean canPull()
     {
-        final boolean result = mGestureManager.onInterceptTouchEvent(ev);
-        return super.onInterceptTouchEvent(ev) || result;
+        final boolean checkDegreeX = mGestureManager.getTouchHelper().getDegreeXFrom(FTouchHelper.EVENT_DOWN) < 30;
+        return checkDegreeX;
     }
 
     @Override
