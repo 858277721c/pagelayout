@@ -176,7 +176,7 @@ public class FPageLayout extends FrameLayout
     private boolean canPull()
     {
         final int dx = (int) mGestureManager.getTouchHelper().getDeltaXFrom(FTouchHelper.EVENT_DOWN);
-        if (dx < mTouchSlop)
+        if (Math.abs(dx) < mTouchSlop)
         {
             return false;
         }
