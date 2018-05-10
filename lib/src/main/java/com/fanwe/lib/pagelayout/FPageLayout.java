@@ -33,11 +33,14 @@ public class FPageLayout extends FrameLayout
     private View mPageView;
     private FViewBounds mPageViewBounds;
     private FGestureManager mGestureManager;
+    private int mTouchSlop;
 
     private GestureCallback mGestureCallback;
 
     private void init()
     {
+        mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
+
         mGestureManager = new FGestureManager(getContext());
         mGestureManager.setCallback(mGestureManagerCallback);
         mPageViewBounds = new FViewBounds(null);
@@ -172,6 +175,12 @@ public class FPageLayout extends FrameLayout
 
     private boolean canPull()
     {
+        final int dx = (int) mGestureManager.getTouchHelper().getDeltaXFrom(FTouchHelper.EVENT_DOWN);
+        if (dx < mTouchSlop)
+        {
+            return false;
+        }
+
         final boolean checkDegreeX = mGestureManager.getTouchHelper().getDegreeXFrom(FTouchHelper.EVENT_DOWN) < 30;
         return checkDegreeX;
     }
@@ -179,8 +188,7 @@ public class FPageLayout extends FrameLayout
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev)
     {
-        final boolean result = mGestureManager.onInterceptTouchEvent(ev);
-        return super.onInterceptTouchEvent(ev) || result;
+        return mGestureManager.onInterceptTouchEvent(ev);
     }
 
     @Override
