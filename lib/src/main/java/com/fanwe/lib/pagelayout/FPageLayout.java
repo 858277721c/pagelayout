@@ -35,7 +35,7 @@ public class FPageLayout extends FrameLayout
     private FGestureManager mGestureManager;
     private int mTouchSlop;
 
-    private GestureCallback mGestureCallback;
+    private OnClickListener mOnClickListener;
 
     private void init()
     {
@@ -46,15 +46,10 @@ public class FPageLayout extends FrameLayout
         mPageViewBounds = new FViewBounds(null);
     }
 
-    public void setGestureCallback(GestureCallback gestureCallback)
+    @Override
+    public void setOnClickListener(OnClickListener onClickListener)
     {
-        mGestureCallback = gestureCallback;
-    }
-
-    public void setPageView(View pageView)
-    {
-        mPageView = pageView;
-        mPageViewBounds.setView(pageView);
+        mOnClickListener = onClickListener;
     }
 
     @Override
@@ -88,11 +83,6 @@ public class FPageLayout extends FrameLayout
         @Override
         public boolean onConsumeEvent(MotionEvent event)
         {
-            if (mPageView == null)
-            {
-                return false;
-            }
-
             final int left = mPageView.getLeft();
             final int minLeft = 0;
             final int maxLeft = mPageView.getWidth();
@@ -108,9 +98,9 @@ public class FPageLayout extends FrameLayout
         @Override
         public void onConsumeEventFinish(MotionEvent event)
         {
-            if (mPageView == null)
+            if (mGestureManager.isClick(event))
             {
-                return;
+                if (mOnClickListener != null) mOnClickListener.onClick(FPageLayout.this);
             }
 
             mGestureManager.getVelocityTracker().computeCurrentVelocity(1000);
@@ -146,10 +136,6 @@ public class FPageLayout extends FrameLayout
         @Override
         public void onComputeScroll(int dx, int dy, boolean finish)
         {
-            if (mPageView == null)
-            {
-                return;
-            }
             mPageView.offsetLeftAndRight(dx);
             mPageViewBounds.save();
         }
@@ -195,14 +181,14 @@ public class FPageLayout extends FrameLayout
     {
         super.onFinishInflate();
 
-        if (getChildCount() > 0)
+        final int count = getChildCount();
+        if (count != 1)
         {
-            setPageView(getChildAt(0));
+            throw new IllegalArgumentException(getClass().getSimpleName() + " must contains one child");
         }
-    }
 
-    public interface GestureCallback
-    {
-        void onSingleTapUp();
+        final View child = getChildAt(0);
+        mPageView = child;
+        mPageViewBounds.setView(child);
     }
 }
