@@ -162,8 +162,7 @@ public class FPageLayout extends FrameLayout
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
-        final boolean result = mGestureManager.onTouchEvent(event);
-        return super.onTouchEvent(event) || result;
+        return mGestureManager.onTouchEvent(event);
     }
 
     @Override
