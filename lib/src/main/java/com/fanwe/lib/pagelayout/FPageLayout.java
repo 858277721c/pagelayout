@@ -42,7 +42,7 @@ public class FPageLayout extends FrameLayout
         mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
 
         mGestureManager = new FGestureManager(getContext());
-        mGestureManager.setCallback(mGestureManagerCallback);
+        mGestureManager.setCallback(mSimpleCallback);
         mPageViewBounds = new FViewBounds(null);
     }
 
@@ -71,36 +71,18 @@ public class FPageLayout extends FrameLayout
         mPageViewBounds.layout();
     }
 
-    private final FGestureManager.Callback mGestureManagerCallback = new FGestureManager.Callback()
+    private final FGestureManager.SimpleCallback mSimpleCallback = new FGestureManager.SimpleCallback()
     {
-        @Override
-        public boolean shouldInterceptTouchEvent(MotionEvent event)
-        {
-            return false;
-        }
-
-        @Override
-        public void onTagInterceptChanged(boolean intercept)
-        {
-
-        }
-
         @Override
         public boolean consumeDownEvent(MotionEvent event)
         {
-            return false;
+            return true;
         }
 
         @Override
         public boolean shouldConsumeTouchEvent(MotionEvent event)
         {
             return canPull();
-        }
-
-        @Override
-        public void onTagConsumeChanged(boolean consume)
-        {
-
         }
 
         @Override
