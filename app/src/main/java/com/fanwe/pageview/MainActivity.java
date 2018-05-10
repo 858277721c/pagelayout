@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.fanwe.lib.looper.FLooper;
+import com.fanwe.lib.looper.impl.FSimpleLooper;
 import com.fanwe.lib.pagelayout.FPageLayout;
 
 public class MainActivity extends AppCompatActivity
@@ -15,6 +17,8 @@ public class MainActivity extends AppCompatActivity
 
     private FPageLayout view_page;
     private Button btn;
+
+    private FLooper mLooper = new FSimpleLooper();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -48,5 +52,21 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(MainActivity.this, "click", Toast.LENGTH_SHORT).show();
             }
         });
+
+        mLooper.start(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                view_page.setLayoutParams(view_page.getLayoutParams());
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        mLooper.stop();
     }
 }
