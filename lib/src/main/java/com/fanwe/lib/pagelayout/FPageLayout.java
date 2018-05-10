@@ -4,31 +4,44 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
+import android.widget.FrameLayout;
 
+import com.fanwe.lib.touchhelper.FGestureManager;
 import com.fanwe.lib.touchhelper.FTouchHelper;
-import com.fanwe.lib.touchhelper.view.FGestureFrameLayout;
 
-public class FPageLayout extends FGestureFrameLayout
+public class FPageLayout extends FrameLayout
 {
     public FPageLayout(Context context)
     {
         super(context);
+        init();
     }
 
     public FPageLayout(Context context, AttributeSet attrs)
     {
         super(context, attrs);
+        init();
     }
 
     public FPageLayout(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
+        init();
     }
 
     private View mPageView;
-    private FViewBounds mPageViewBounds = new FViewBounds(null);
+    private FViewBounds mPageViewBounds;
+    private FGestureManager mGestureManager;
 
     private GestureCallback mGestureCallback;
+
+    private void init()
+    {
+        mGestureManager = new FGestureManager(getContext());
+        mGestureManager.setCallback(mGestureManagerCallback);
+        mPageViewBounds = new FViewBounds(null);
+    }
 
     public void setGestureCallback(GestureCallback gestureCallback)
     {
@@ -45,91 +58,140 @@ public class FPageLayout extends FGestureFrameLayout
     protected void onSizeChanged(int w, int h, int oldw, int oldh)
     {
         super.onSizeChanged(w, h, oldw, oldh);
-        getScroller().setMaxScrollDistance(w);
+        mGestureManager.getScroller().setMaxScrollDistance(w);
     }
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom)
     {
         super.onLayout(changed, left, top, right, bottom);
-
         mPageViewBounds.layout();
     }
 
-    @Override
-    protected boolean onGestureScroll(MotionEvent event)
+    private final FGestureManager.Callback mGestureManagerCallback = new FGestureManager.Callback()
     {
-        if (mPageView == null)
+        @Override
+        public boolean shouldInterceptTouchEvent(MotionEvent event)
         {
             return false;
         }
 
-        final int left = mPageView.getLeft();
-        final int minLeft = 0;
-        final int maxLeft = mPageView.getWidth();
-        final int dx = (int) getTouchHelper().getDeltaXFrom(FTouchHelper.EVENT_LAST);
-        final int legalDx = getTouchHelper().getLegalDeltaX(left, minLeft, maxLeft, dx);
-
-        mPageView.offsetLeftAndRight(legalDx);
-        mPageViewBounds.save();
-
-        return true;
-    }
-
-    @Override
-    protected void onGestureUp(MotionEvent event, float velocityX, float velocityY)
-    {
-        if (mPageView == null)
+        @Override
+        public void onTagInterceptChanged(boolean intercept)
         {
-            return;
+
         }
 
-        final int left = mPageView.getLeft();
-        final int minLeft = 0;
-        final int maxLeft = mPageView.getWidth();
-
-        if (Math.abs(velocityX) > getViewConfiguration().getScaledMinimumFlingVelocity() * 20)
+        @Override
+        public boolean consumeDownEvent(MotionEvent event)
         {
-            if (velocityX > 0)
+            return false;
+        }
+
+        @Override
+        public boolean shouldConsumeTouchEvent(MotionEvent event)
+        {
+            return true;
+        }
+
+        @Override
+        public void onTagConsumeChanged(boolean consume)
+        {
+
+        }
+
+        @Override
+        public boolean onConsumeEvent(MotionEvent event)
+        {
+            if (mPageView == null)
             {
-                getScroller().startScrollToX(left, maxLeft, -1);
+                return false;
+            }
+
+            final int left = mPageView.getLeft();
+            final int minLeft = 0;
+            final int maxLeft = mPageView.getWidth();
+            final int dx = (int) mGestureManager.getTouchHelper().getDeltaXFrom(FTouchHelper.EVENT_LAST);
+            final int legalDx = mGestureManager.getTouchHelper().getLegalDeltaX(left, minLeft, maxLeft, dx);
+
+            mPageView.offsetLeftAndRight(legalDx);
+            mPageViewBounds.save();
+
+            return true;
+        }
+
+        @Override
+        public void onConsumeEventFinish(MotionEvent event)
+        {
+            if (mPageView == null)
+            {
+                return;
+            }
+
+            mGestureManager.getVelocityTracker().computeCurrentVelocity(1000);
+            final float velocityX = mGestureManager.getVelocityTracker().getXVelocity();
+
+            final int left = mPageView.getLeft();
+            final int minLeft = 0;
+            final int maxLeft = mPageView.getWidth();
+
+            if (Math.abs(velocityX) > ViewConfiguration.get(getContext()).getScaledMinimumFlingVelocity() * 20)
+            {
+                if (velocityX > 0)
+                {
+                    mGestureManager.getScroller().startScrollToX(left, maxLeft, -1);
+                } else
+                {
+                    mGestureManager.getScroller().startScrollToX(left, minLeft, -1);
+                }
             } else
             {
-                getScroller().startScrollToX(left, minLeft, -1);
+                if (left < maxLeft / 2)
+                {
+                    mGestureManager.getScroller().startScrollToX(left, minLeft, -1);
+                } else
+                {
+                    mGestureManager.getScroller().startScrollToX(left, maxLeft, -1);
+                }
             }
-        } else
-        {
-            if (left < maxLeft / 2)
-            {
-                getScroller().startScrollToX(left, minLeft, -1);
-            } else
-            {
-                getScroller().startScrollToX(left, maxLeft, -1);
-            }
+
+            invalidate();
         }
 
-        invalidate();
+        @Override
+        public void onComputeScroll(int dx, int dy, boolean finish)
+        {
+            if (mPageView == null)
+            {
+                return;
+            }
+            mPageView.offsetLeftAndRight(dx);
+            mPageViewBounds.save();
+        }
+    };
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev)
+    {
+        final boolean result = mGestureManager.onInterceptTouchEvent(ev);
+        return super.onInterceptTouchEvent(ev) || result;
     }
 
     @Override
-    protected boolean onGestureSingleTapUp(MotionEvent event)
+    public boolean onTouchEvent(MotionEvent event)
     {
-        if (mGestureCallback != null)
-        {
-            mGestureCallback.onSingleTapUp();
-        }
-        return super.onGestureSingleTapUp(event);
+        final boolean result = mGestureManager.onTouchEvent(event);
+        return super.onTouchEvent(event) || result;
     }
 
     @Override
-    protected void onComputeScroll(int dx, int dy)
+    public void computeScroll()
     {
-        if (mPageView == null)
+        super.computeScroll();
+        if (mGestureManager.computeScroll())
         {
-            return;
+            invalidate();
         }
-        mPageView.offsetLeftAndRight(dx);
-        mPageViewBounds.save();
     }
 
     @Override
