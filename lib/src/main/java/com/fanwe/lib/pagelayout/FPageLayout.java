@@ -7,8 +7,9 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
 
-import com.fanwe.lib.touchhelper.FGestureManager;
-import com.fanwe.lib.touchhelper.FTouchHelper;
+import com.fanwe.lib.gesture.FGestureManager;
+import com.fanwe.lib.gesture.FTouchHelper;
+import com.fanwe.lib.gesture.utils.FViewPosition;
 
 public class FPageLayout extends FrameLayout
 {
@@ -31,7 +32,7 @@ public class FPageLayout extends FrameLayout
     }
 
     private View mPageView;
-    private FViewBounds mPageViewBounds;
+    private final FViewPosition mPageViewPosition = new FViewPosition();
     private FGestureManager mGestureManager;
     private int mTouchSlop;
 
@@ -43,7 +44,6 @@ public class FPageLayout extends FrameLayout
 
         mGestureManager = new FGestureManager(getContext());
         mGestureManager.setCallback(mSimpleCallback);
-        mPageViewBounds = new FViewBounds(null);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class FPageLayout extends FrameLayout
     protected void onLayout(boolean changed, int left, int top, int right, int bottom)
     {
         super.onLayout(changed, left, top, right, bottom);
-        mPageViewBounds.layout();
+        mPageViewPosition.layout(mPageView);
     }
 
     private final FGestureManager.SimpleCallback mSimpleCallback = new FGestureManager.SimpleCallback()
@@ -90,7 +90,7 @@ public class FPageLayout extends FrameLayout
             final int legalDx = mGestureManager.getTouchHelper().getLegalDeltaX(left, minLeft, maxLeft, dx);
 
             mPageView.offsetLeftAndRight(legalDx);
-            mPageViewBounds.save();
+            mPageViewPosition.save(mPageView);
 
             return true;
         }
@@ -137,7 +137,7 @@ public class FPageLayout extends FrameLayout
         public void onComputeScroll(int dx, int dy, boolean finish)
         {
             mPageView.offsetLeftAndRight(dx);
-            mPageViewBounds.save();
+            mPageViewPosition.save(mPageView);
         }
     };
 
@@ -188,6 +188,5 @@ public class FPageLayout extends FrameLayout
 
         final View child = getChildAt(0);
         mPageView = child;
-        mPageViewBounds.setView(child);
     }
 }
