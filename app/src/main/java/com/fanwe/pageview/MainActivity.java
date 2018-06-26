@@ -6,7 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.fanwe.lib.looper.FLooper;
+import com.fanwe.lib.looper.Looper;
 import com.fanwe.lib.looper.impl.FSimpleLooper;
 import com.fanwe.lib.pagelayout.FPageLayout;
 
@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity
     private FPageLayout view_page;
     private Button btn;
 
-    private FLooper mLooper = new FSimpleLooper();
+    private Looper mLooper = new FSimpleLooper();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
