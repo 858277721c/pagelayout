@@ -53,8 +53,8 @@ public class FPageLayout extends FrameLayout
                 public boolean onEventConsume(MotionEvent event)
                 {
                     final int left = mPageView.getLeft();
-                    final int minLeft = 0;
-                    final int maxLeft = mPageView.getWidth();
+                    final int minLeft = getLeftMin();
+                    final int maxLeft = getLeftMax();
                     final int dx = (int) getGestureManager().getTouchHelper().getDeltaX();
                     final int legalDx = FTouchHelper.getLegalDelta(left, minLeft, maxLeft, dx);
 
@@ -77,8 +77,8 @@ public class FPageLayout extends FrameLayout
                     final float velocityX = velocityTracker.getXVelocity();
 
                     final int left = mPageView.getLeft();
-                    final int minLeft = 0;
-                    final int maxLeft = mPageView.getWidth();
+                    final int minLeft = getLeftMin();
+                    final int maxLeft = getLeftMax();
 
                     if (Math.abs(velocityX) > ViewConfiguration.get(getContext()).getScaledMinimumFlingVelocity() * 20)
                     {
@@ -130,6 +130,16 @@ public class FPageLayout extends FrameLayout
             });
         }
         return mScroller;
+    }
+
+    private int getLeftMin()
+    {
+        return getPaddingLeft();
+    }
+
+    private int getLeftMax()
+    {
+        return getWidth() - getPaddingRight();
     }
 
     @Override
