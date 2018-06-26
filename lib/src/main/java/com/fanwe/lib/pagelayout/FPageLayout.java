@@ -18,33 +18,24 @@ public class FPageLayout extends FrameLayout
     public FPageLayout(Context context)
     {
         super(context);
-        init();
     }
 
     public FPageLayout(Context context, AttributeSet attrs)
     {
         super(context, attrs);
-        init();
     }
 
     public FPageLayout(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
-        init();
     }
 
     private View mPageView;
     private final ViewPosition mPageViewPosition = new ViewPosition();
     private FGestureManager mGestureManager;
     private FScroller mScroller;
-    private int mTouchSlop;
 
     private OnClickListener mOnClickListener;
-
-    private void init()
-    {
-        mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
-    }
 
     private FGestureManager getGestureManager()
     {
@@ -164,7 +155,9 @@ public class FPageLayout extends FrameLayout
     private boolean canPull()
     {
         final int dx = (int) getGestureManager().getTouchHelper().getDeltaXFromDown();
-        if (Math.abs(dx) < mTouchSlop)
+        final int touchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
+
+        if (Math.abs(dx) < touchSlop)
             return false;
 
         final boolean checkDegreeX = getGestureManager().getTouchHelper().getDegreeXFromDown() < 30;
