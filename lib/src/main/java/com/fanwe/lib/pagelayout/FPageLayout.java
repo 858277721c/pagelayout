@@ -206,4 +206,46 @@ public class FPageLayout extends FrameLayout
         final View child = getChildAt(0);
         mPageView = child;
     }
+
+    private static final class ViewPosition
+    {
+        private int mLeft;
+        private int mTop;
+
+        public ViewPosition()
+        {
+            save(null);
+        }
+
+        public boolean hasPosition()
+        {
+            return mLeft != Integer.MIN_VALUE && mTop != Integer.MIN_VALUE;
+        }
+
+        public boolean save(View view)
+        {
+            if (view == null)
+            {
+                mLeft = Integer.MIN_VALUE;
+                mTop = Integer.MIN_VALUE;
+                return false;
+            }
+
+            mLeft = view.getLeft();
+            mTop = view.getTop();
+            return true;
+        }
+
+        public boolean layout(View view)
+        {
+            if (view == null)
+                return false;
+
+            if (!hasPosition())
+                return false;
+
+            view.layout(mLeft, mTop, mLeft + view.getMeasuredWidth(), mTop + view.getMeasuredHeight());
+            return true;
+        }
+    }
 }
