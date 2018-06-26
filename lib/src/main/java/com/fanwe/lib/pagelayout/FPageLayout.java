@@ -34,7 +34,7 @@ public class FPageLayout extends FrameLayout
     }
 
     private View mPageView;
-    private final FViewPosition mPageViewPosition = new FViewPosition();
+    private final ViewPosition mPageViewPosition = new ViewPosition();
     private FGestureManager mGestureManager;
     private FScroller mScroller;
     private int mTouchSlop;

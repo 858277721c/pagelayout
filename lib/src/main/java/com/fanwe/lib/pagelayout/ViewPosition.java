@@ -2,12 +2,12 @@ package com.fanwe.lib.pagelayout;
 
 import android.view.View;
 
-final class FViewPosition
+final class ViewPosition
 {
     private int mLeft;
     private int mTop;
 
-    public FViewPosition()
+    public ViewPosition()
     {
         reset();
     }
